@@ -33,8 +33,11 @@ const deleteUsuario = (req, res = response ) => {
 }
 
 const putUsuario = (req, res = response) => {
+
+    const id = req.params.id
     res.json({
-        msg: 'Put desde el controlador'
+        msg: 'Put desde el controlador',
+        id
     })
 }
 
