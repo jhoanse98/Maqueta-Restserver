@@ -1,6 +1,8 @@
 //Lo usamos para obtener los métodos de response en nuestras funciones
 const { response } = require('express');
 
+const Usuario = require("../models/usuario");
+
 const getUsuarios = (req, res = response) => {
 
     const query = req.query;
@@ -15,14 +17,18 @@ const getUsuarios = (req, res = response) => {
     })
 }
 
-const postUsuario = (req, res = response) => {
+const postUsuario = async (req, res = response) => {
 
-    const body = req.body;
+    const {nombre, email, password, rol} = req.body;
     console.log(req.body)
 
-    console.log(body)
+    const usuario = new Usuario({nombre, email, password, rol}) //creamos la instancia del modelo
+
+    await usuario.save()
+
     res.json({
-        msg: 'Post desde el controlador'
+        msg: 'Post desde el controlador',
+        usuario
     })
 }
 
