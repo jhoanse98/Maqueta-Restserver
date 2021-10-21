@@ -1,7 +1,9 @@
 //Lo usamos para obtener los métodos de response en nuestras funciones
 const { response } = require('express');
+const bcryptjs = require("bcryptjs");
 
 const Usuario = require("../models/usuario");
+const { validationResult } = require('express-validator');
 
 const getUsuarios = (req, res = response) => {
 
@@ -20,10 +22,32 @@ const getUsuarios = (req, res = response) => {
 const postUsuario = async (req, res = response) => {
 
     const {nombre, email, password, rol} = req.body;
-    console.log(req.body)
+    const errores = validationResult(req);
+
+    if(!errores.isEmpty()){
+        return res.status(400).json({
+            msg: "Hay errores",
+            errores
+        })
+    }
+
+
+    //validamos email unico
+    const validaEmail = Usuario.findOne({email})
+
+    if(validaEmail){
+        return res.status(400).json({
+            msg: "Correo ya está en uso"
+        })
+    }
 
     const usuario = new Usuario({nombre, email, password, rol}) //creamos la instancia del modelo
 
+    //encriptar 
+    const salt = bcryptjs.genSaltSync()
+    usuario.password = bcryptjs.hashSync(password, salt);
+
+    //guardar en la BD
     await usuario.save()
 
     res.json({
