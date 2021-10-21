@@ -33,7 +33,7 @@ const postUsuario = async (req, res = response) => {
 
 
     //validamos email unico
-    const validaEmail = Usuario.findOne({email})
+    const validaEmail = await Usuario.findOne({email})
 
     if(validaEmail){
         return res.status(400).json({
