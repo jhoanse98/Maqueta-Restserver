@@ -32,14 +32,6 @@ const postUsuario = async (req, res = response) => {
     }
 
 
-    //validamos email unico
-    const validaEmail = await Usuario.findOne({email})
-
-    if(validaEmail){
-        return res.status(400).json({
-            msg: "Correo ya está en uso"
-        })
-    }
 
     const usuario = new Usuario({nombre, email, password, rol}) //creamos la instancia del modelo
 
@@ -51,7 +43,6 @@ const postUsuario = async (req, res = response) => {
     await usuario.save()
 
     res.json({
-        msg: 'Post desde el controlador',
         usuario
     })
 }
