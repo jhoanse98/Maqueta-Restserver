@@ -9,13 +9,11 @@ const getUsuarios = (req, res = response) => {
 
     const query = req.query;
 
-    const {q, nombre, apellido, familiar } = query
+    const {q, nombre, apellido, familiar, for_sale } = query
+    console.log(query)
     res.json({
         ok: 'get desde el controlador',
-        q,
-        nombre,
-        apellido,
-        familiar
+        query
     })
 }
 
@@ -53,12 +51,21 @@ const deleteUsuario = (req, res = response ) => {
     })
 }
 
-const putUsuario = (req, res = response) => {
+const putUsuario = async (req, res = response) => {
 
     const id = req.params.id
+    const {password, google, email, ...resto} = req.body
+
+    if(password){
+        const salt = bcryptjs.genSaltSync()
+        resto.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(id, resto)
+
     res.json({
         msg: 'Put desde el controlador',
-        id
+        usuario
     })
 }
 

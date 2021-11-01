@@ -16,9 +16,16 @@ const emailExiste = async (email = "") => {
     }
 }
 
+const existeUsuarioId = async (id) => {
+    const usuarioId = await Usuario.findById(id)
 
+    if (!usuarioId){
+        throw new Error(`No existe un usuario con este Id ${id}`)
+    }
+}
 
 module.exports = {
     esRoleValido,
-    emailExiste
+    emailExiste,
+    existeUsuarioId
 }
