@@ -7,6 +7,7 @@ const { validaCampos } = require('../middlewares/valida-campos');
 
 const router = Router();
 
+router.get('/', getUsuarios)
 
 router.post('/',[
     check("email", "El email que ingresó no es válido").isEmail(),
@@ -25,6 +26,10 @@ router.put('/:id',[
     validaCampos,
 ], putUsuario)
 
-router.delete('/', deleteUsuario)
+router.delete('/:id',[
+    check('id', 'El id no es válido').isMongoId(),
+    check('id').custom(existeUsuarioId),
+    validaCampos
+], deleteUsuario)
 
 module.exports = router;

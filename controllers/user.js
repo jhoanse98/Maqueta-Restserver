@@ -5,15 +5,31 @@ const bcryptjs = require("bcryptjs");
 const Usuario = require("../models/usuario");
 const { validationResult } = require('express-validator');
 
-const getUsuarios = (req, res = response) => {
+const getUsuarios = async (req, res = response) => {
 
-    const query = req.query;
+    const {limite = 5, desde = 0} = req.query
+    const query = {estado:true}
 
-    const {q, nombre, apellido, familiar, for_sale } = query
-    console.log(query)
+    /*
+    const usuarios = await Usuario.find(query)
+        .skip(Number(desde))
+        .limit(Number(limite))
+
+    const total = await Usuario.count(query)
+    */
+        
+    const [total, usuarios] = await Promise.all([
+        Usuario.count(query),
+        Usuario.find(query)
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ])
+
+    
+    //const {q, nombre, apellido, familiar, for_sale } = query
     res.json({
-        ok: 'get desde el controlador',
-        query
+        total,
+        usuarios
     })
 }
 
@@ -45,9 +61,17 @@ const postUsuario = async (req, res = response) => {
     })
 }
 
-const deleteUsuario = (req, res = response ) => {
+const deleteUsuario = async (req, res = response ) => {
+
+    const {id} = req.params;
+
+    //const usuario = await Usuario.findByIdAndDelete(id) borrado físico
+
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado:false});
     res.json({
-        msg: 'Delete desde el controlador'
+        msg: 'Delete desde el controlador',
+        id,
+        usuario
     })
 }
 
