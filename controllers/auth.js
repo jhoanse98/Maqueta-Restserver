@@ -13,7 +13,6 @@ const login = async (req, res=response)  => {
 
         //Validar que el usuario exista
         const usuario = await Usuario.findOne({email})
-        console.log(usuario)
         if(!usuario){
             return res.status(400).json({
                 msg: "Usuario/password no son correctos - correo"
@@ -74,7 +73,6 @@ const googleSignIn = async (req, res=response) => {
 
             usuario= new Usuario(data);
             await usuario.save();
-            console.log(usuario)
         }
 
         //si el usuario está en la BD
