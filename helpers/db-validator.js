@@ -2,6 +2,7 @@ const Categoria = require("../models/categoria");
 const Role = require("../models/role");
 const Usuario = require("../models/usuario");
 const Producto = require("../models/producto");
+const { collection } = require("../models/usuario");
 
 
 const esRoleValido = async (rol = '') => {
@@ -34,6 +35,15 @@ const existeCategoriaId = async (id) => {
     }
 }
 
+const coleccionesPermitidas = (coleccion="", colecciones = []) => {
+    const incluida = colecciones.includes(coleccion);
+    if(!incluida){
+        throw new Error(`No existe la coleccion ${coleccion}, las colecciones permitidas son ${colecciones}`)
+    }
+
+    return true
+}
+
 
 const existeProductoId = async (id) => {
     const productoId = await Producto.findById(id)
@@ -47,5 +57,6 @@ module.exports = {
     emailExiste,
     existeUsuarioId,
     existeCategoriaId,
-    existeProductoId
+    existeProductoId,
+    coleccionesPermitidas
 }

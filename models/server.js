@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fileUpload = require('express-fileupload')
 
 const {conectarDB} = require("../database/config")
 
@@ -29,6 +30,14 @@ class Server{
 
         //servir el sitio estatico
         this.app.use(express.static('public'));
+
+
+        //fileupload
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true,
+        }));
     }
 
     async conexionDB(){
@@ -39,8 +48,10 @@ class Server{
         this.app.use('/api/auth', require('../routes/auth'))
         this.app.use('/api/buscar', require("../routes/buscar"))
         this.app.use('/api/categorias', require('../routes/categorias'))
+        this.app.use('/api/uploads', require('../routes/uploads'))
         this.app.use('/api/usuarios', require('../routes/user'))
         this.app.use('/api/productos', require('../routes/productos'))
+
         
     }
 

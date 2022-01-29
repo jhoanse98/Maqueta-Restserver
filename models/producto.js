@@ -25,7 +25,8 @@ const productoSchema = Schema({
         default: 0
     },
     descripcion: {type: String},
-    disponibilidad: { type: Boolean}
+    disponibilidad: { type: Boolean},
+    img: { type: String }
 })
 
 module.exports = model("Producto", productoSchema);
